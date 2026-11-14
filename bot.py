@@ -1,13 +1,9 @@
 import os
-import time
-import asyncio
-import schedule
-from telegram import Bot
+import requests
+import datetime
 
 TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
-
-bot = Bot(token=TOKEN)
 
 DAILY_LESSONS = [
     {
@@ -44,30 +40,29 @@ DAILY_LESSONS = [
     }
 ]
 
-async def send_lesson():
-    import datetime
+def send_lesson():
     day_index = datetime.datetime.now().day % len(DAILY_LESSONS)
     lesson = DAILY_LESSONS[day_index]
     
     message = (
-        f"🇯🇵 **JLPT {lesson['level']} Daily Nihongo** 🇯🇵\n\n"
-        f"📌 **මාතෘකාව:** {lesson['topic']}\n\n"
-        f"✍️ **Japanese:** {lesson['jp']}\n"
-        f"🔤 **Romaji:** {lesson['romaji']}\n"
-        f"🌐 **English:** {lesson['en']}\n"
-        f"🇱🇰 **සිංහල:** {lesson['si']}\n\n"
+        f"🇯🇵 *JLPT {lesson['level']} Daily Nihongo* 🇯🇵\n\n"
+        f"📌 *මාතෘකාව:* {lesson['topic']}\n\n"
+        f"✍️ *Japanese:* {lesson['jp']}\n"
+        f"🔤 *Romaji:* {lesson['romaji']}\n"
+        f"🌐 *English:* {lesson['en']}\n"
+        f"🇱🇰 *සිංහල:* {lesson['si']}\n\n"
         f"💡 *දවසට එක වචනයක් හෝ වාක්‍යයක් පුහුණු වන්න!* 💪"
     )
-    await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
-
-def job():
-    asyncio.run(send_lesson())
-
-# ශ්‍රී ලංකා වේලාවට අනුව උදෑසන 7:00 ට පණිවිඩය එවීමට (UTC 01:30)
-schedule.every().day.at("01:30").do(job)
+    
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {
+        "chat_id": CHAT_ID,
+        "text": message,
+        "parse_mode": "Markdown"
+    }
+    
+    response = requests.post(url, json=payload)
+    print(response.json())
 
 if __name__ == "__main__":
-    print("Bot is running...")
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    send_lesson()
