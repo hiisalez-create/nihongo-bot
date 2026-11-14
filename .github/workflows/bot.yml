@@ -2,7 +2,7 @@ name: Daily Nihongo Bot
 
 on:
   schedule:
-    - cron: '30 1 * * *' # ශ්‍රී ලංකා වේලාවෙන් උදෑසන 7:00 ට ක්‍රියාත්මක වේ
+    - cron: '30 1 * * *'
   workflow_dispatch:
 
 jobs:
@@ -18,10 +18,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r req.txt
 
       - name: Run bot script
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: python bot.py
+        run: python main.py
