@@ -1,2 +1,0 @@
-# nihongo-bot
-Nothing Theory
