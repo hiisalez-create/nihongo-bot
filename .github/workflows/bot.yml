@@ -2,7 +2,7 @@ name: Daily Nihongo Bot
 
 on:
   schedule:
-    - cron: '30 1 * * *'
+    - cron: '30 1 * * *' # ශ්‍රී ලංකා වේලාවෙන් උදෑසන 7:00 ට ක්‍රියාත්මක වේ
   workflow_dispatch:
 
 jobs:
